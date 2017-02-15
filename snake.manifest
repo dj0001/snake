@@ -1,0 +1,15 @@
+{
+	"short_name": "snake",
+	"name": "play nokia snake",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "snake.png",
+			"sizes": "144x144",
+			"type": "image/png"
+		}
+	],
+	"start_url": ".",
+	"theme_color": "#5ac1f2",
+	"background_color": "#383838"
+}

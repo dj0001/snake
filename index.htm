@@ -321,6 +321,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		ctx.clearRect(0,0, canvas.width, canvas.height);
 		
 		 var tmp=localStorage.height||0; if (score>tmp) localStorage.height=score;
+		 if("vibrate" in navigator) navigator.vibrate(100)  //
 		// reset score
 		score = 0;
 		document.getElementById('score').innerHTML = score;

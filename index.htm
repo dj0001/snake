@@ -45,7 +45,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		
 		// clear snake variable if it exists
 		if (snake_movement) clearInterval(snake_movement);
-		
+		 document.getElementById('score').innerHTML = score;  //
 		// start game
 		play();
 	}
@@ -78,6 +78,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		} else {
 			alert("We're sorry, but your browser does not support the canvas tag. Please use a more modern browser (Google Chrome is a great choice).");
 		}
+	document.getElementById('score').innerHTML = localStorage.height||score;  //highscore
 	}
 	
 	// capture keystrokes to move the snake
@@ -226,6 +227,9 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	
 	// decide which direction to go after hitting the wall
 	function auto_dir(xy) {
+      if(top.location.search.slice(1)==2) // ?2 no walls
+      a = (xy == 'x') ? (cur_pos['y'] == 0) ? do_move('up', 'y', canvas.height-grid_size) : do_move('down', 'y', 0) : (cur_pos['x'] == 0) ? do_move('left', 'x', canvas.width-grid_size) : do_move('right', 'x', 0);
+      else
 		a = (xy == 'x') ? (cur_pos['x'] > canvas.width / 2) ? left() : right() : (cur_pos['y'] > canvas.height / 2) ? up() : down();
 	}
 	
@@ -316,6 +320,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		// clear canvas
 		ctx.clearRect(0,0, canvas.width, canvas.height);
 		
+		 var tmp=localStorage.height||0; if (score>tmp) localStorage.height=score;
 		// reset score
 		score = 0;
 		document.getElementById('score').innerHTML = score;

@@ -15,7 +15,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 <script type="text/javascript">
 	// setup environment variables
 	var canvas = null,
-		cur_pos = {x: 50, y: 50},
+		cur_pos,  // = {x: 50, y: 50}
 		grid_size = 10,
 		dir = 'right',
 		body = [],
@@ -26,6 +26,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		snake_movement = null,
 		press_keys = true,
 		speed = 100;
+	         var audiop = new Audio("http://dl.dropbox.com/u/26141789/canvas/snake/food.ogg") //food.ogg
 	
 	function start(){
 		// make sure the canvas is empty
@@ -48,6 +49,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		 document.getElementById('score').innerHTML = score;  //
 		// start game
 		play();
+	audiop.play()  //
 	}
 	
 	// check for browser support
@@ -78,6 +80,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		} else {
 			alert("We're sorry, but your browser does not support the canvas tag. Please use a more modern browser (Google Chrome is a great choice).");
 		}
+	if(top.location.search.slice(1)=="0") localStorage.removeItem("height");
 	document.getElementById('score').innerHTML = localStorage.height||score;  //highscore
 	}
 	
@@ -263,6 +266,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 			score += 10;
 		}
 		document.getElementById('score').innerHTML = score;
+		 audiop.play()  //
 	}
 	
 	// change difficult level

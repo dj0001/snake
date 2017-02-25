@@ -25,7 +25,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		score = 0,
 		snake_movement = null,
 		press_keys = true,
-		speed = 100;
+		speed = 100,
+		 scol = 'rgb(254,215,0)';
 	         var audiop = new Audio("bleep.ogg") //http://dl.dropbox.com/u/26141789/canvas/snake/food.ogg
 	
 	function start(){
@@ -148,7 +149,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		}
 		
 		// set the color of the snake
-		ctx.fillStyle = 'rgb(254,215,0)';
+		ctx.fillStyle = scol;  //'rgb(254,215,0)'
 		
 		// add a piece onto the array of body blocks
 		body.push([cur_pos['x'], cur_pos['y']]);

@@ -175,7 +175,8 @@ canvas {background:#479438}
 		//The snake is now keyboard controllable
 	}
 
-window.addEventListener('touchstart', function (evt) {xDown = evt.touches[0].clientX; yDown = evt.touches[0].clientY;if(!audiop.played.length) audiop.play()})
+disp.onclick = function(){audiop.play()}  //trigger audio
+window.addEventListener('touchstart', function (evt) {xDown = evt.touches[0].clientX; yDown = evt.touches[0].clientY;})
 window.addEventListener('touchmove', function (evt) {
     if ( ! xDown || ! yDown || evt.touches.length > 1) return;
 

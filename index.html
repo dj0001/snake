@@ -50,7 +50,6 @@ canvas {background:#479438}
 		//every 60ms
 		if(typeof game_loop != "undefined") clearInterval(game_loop);
 		play=confirm("walls?")  //alert("Play")  //
-		audiop.play()
 		disp.textContent=score
 		game_loop = setInterval(paint, speed);  //60
 	}
@@ -106,7 +105,7 @@ canvas {background:#479438}
 		//Now if the head of the snake bumps into its body, the game will restart
 		if(nx == -1 || nx >= w/cw || ny == -1 || ny >= h/cw)  //==  || 
 		{
-		if(play) init(); else if(nx >= w/cw) nx=0; else if(ny >= h/cw) ny=0; else if(nx == -1) nx=Math.floor(w/cw); else if(ny == -1) ny=Math.floor(h/cw)
+		if(play) {init();return} else if(nx >= w/cw) nx=0; else if(ny >= h/cw) ny=0; else if(nx == -1) nx=Math.floor(w/cw); else if(ny == -1) ny=Math.floor(h/cw)
 		}
 		else if(check_collision(nx, ny, snake_array))
 		{
@@ -176,7 +175,7 @@ canvas {background:#479438}
 		//The snake is now keyboard controllable
 	}
 
-window.addEventListener('touchstart', function (evt) {xDown = evt.touches[0].clientX; yDown = evt.touches[0].clientY;})
+window.addEventListener('touchstart', function (evt) {xDown = evt.touches[0].clientX; yDown = evt.touches[0].clientY;if(!audiop.played.length) audiop.play()})
 window.addEventListener('touchmove', function (evt) {
     if ( ! xDown || ! yDown || evt.touches.length > 1) return;
 

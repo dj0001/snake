@@ -86,7 +86,7 @@ function MainLoop() {
     snake1.paint()
     if(snake2.snake_array.length) snake2.paint()
     // Call the main loop again at a frame rate of 30fps
-    setTimeout(function() {requestAnimationFrame(MainLoop)}, speed)
+    game_loop = setTimeout(MainLoop, speed)  //function() {requestAnimationFrame(MainLoop)}
 }
 
 	function init()
@@ -105,7 +105,7 @@ function MainLoop() {
 		
 		//Lets move the snake now using a timer which will trigger the paint function
 		//every 60ms
-		if(typeof game_loop != "undefined") clearInterval(game_loop);
+		if(typeof game_loop != "undefined") clearTimeout(game_loop);  //Interval
 		play=confirm("walls?")  //alert("Play")  //
 		disp.textContent=score
 		MainLoop()  //game_loop = setInterval(paint, speed);  //60

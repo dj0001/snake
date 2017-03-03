@@ -27,20 +27,77 @@ canvas {background:#479438}
 	
 	//Lets save the cell width in a variable for easy control
 	var cw = 10;
-	var d;
+	//var d;
 	var food;
 	var score;
 	var play, speed=100, disp=document.getElementById("display1"), audiop = new Audio("bleep.ogg");  //
 	
 	//Lets create the snake now 
-	var snake_array; //an array of cells to make up the snake
+	//var snake_array; //an array of cells to make up the snake
 	disp.textContent = localStorage.height||score;  //highscore
-	
+
+function Snake(col) {  //Begin Object
+this.d="right"
+this.snake_array = []
+this.color = col
+this.create_snake = function () {var length = 3;for(var i = length-1; i>=0; i--){this.snake_array.push({x: i, y:0})}}
+this.paint = function () {
+		//Pop out the tail cell and place it infront of the head cell
+		var nx = this.snake_array[0].x;
+		var ny = this.snake_array[0].y;
+		if(this.d == "right") nx++;
+		else if(this.d == "left") nx--;
+		else if(this.d == "up") ny--;
+		else if(this.d == "down") ny++;
+		if(nx == -1 || nx >= w/cw || ny == -1 || ny >= h/cw)  //==  || 
+		{
+		if(play) {init();return} else if(nx >= w/cw) nx=0; else if(ny >= h/cw) ny=0; else if(nx == -1) nx=Math.floor(w/cw); else if(ny == -1) ny=Math.floor(h/cw)
+		}
+		else if(check_collision(nx, ny, this.snake_array))
+		{
+			//restart game
+			init();
+			//Lets organize the code a bit now.
+			return;
+		}
+		if(nx == food.x && ny == food.y)
+		{
+			var tail = {x: nx, y: ny};
+			score+=10  //++;
+			audiop.play()
+			//Lets paint the score
+			disp.textContent=score  //
+			//Create new food
+			create_food();
+		}
+		else
+		{
+			ctx.clearRect(this.snake_array[this.snake_array.length-1].x*cw, this.snake_array[this.snake_array.length-1].y*cw, cw, cw)	 //		
+			var tail = this.snake_array.pop(); //pops out the last cell
+			tail.x = nx; tail.y = ny;
+		}
+		this.snake_array.unshift(tail); //puts back the tail as the first cell
+		ctx.fillStyle = this.color  //"yellow";  //		
+    paint_cell(tail.x, tail.y)
+ }
+}  //End Object
+
+function MainLoop() {
+    snake1.paint()
+    if(snake2.snake_array.length) snake2.paint()
+    // Call the main loop again at a frame rate of 30fps
+    setTimeout(function() {requestAnimationFrame(MainLoop)}, speed)
+}
+
 	function init()
 	{
-		d = "right"; //default direction
+		//d = "right"; //default direction
 		ctx.clearRect(0, 0, w, h)
-		create_snake();
+		//create_snake();
+		snake1=new Snake("yellow")
+		snake1.create_snake()
+		snake2=new Snake("blue")
+		//snake2.create_snake()
 		create_food(); //Now we can see the food particle
 		//finally lets display the score
 		var tmp=localStorage.height||0; if (score>tmp) localStorage.height=score;  //
@@ -51,20 +108,10 @@ canvas {background:#479438}
 		if(typeof game_loop != "undefined") clearInterval(game_loop);
 		play=confirm("walls?")  //alert("Play")  //
 		disp.textContent=score
-		game_loop = setInterval(paint, speed);  //60
+		MainLoop()  //game_loop = setInterval(paint, speed);  //60
 	}
+
 	init();
-	
-	function create_snake()
-	{
-		var length = 3; //Length of the snake 5
-		snake_array = []; //Empty array to start with
-		for(var i = length-1; i>=0; i--)
-		{
-			//This will create a horizontal snake starting from the top left
-			snake_array.push({x: i, y:0});
-		}
-	}
 	
 	//Lets create the food now
 	function create_food()
@@ -80,68 +127,6 @@ canvas {background:#479438}
 		ctx.fillStyle = "red";  //
 		paint_cell(food.x, food.y);
 		}
-	
-	//Lets paint the snake now
-	function paint()
-	{
-		//Lets paint the canvas now
-		
-		//The movement code for the snake to come here.
-		//The logic is simple
-		//Pop out the tail cell and place it infront of the head cell
-		var nx = snake_array[0].x;
-		var ny = snake_array[0].y;
-		//These were the position of the head cell.
-		//We will increment it to get the new head position
-		//Lets add proper direction based movement now
-		if(d == "right") nx++;
-		else if(d == "left") nx--;
-		else if(d == "up") ny--;
-		else if(d == "down") ny++;
-	
-		//Lets add the game over clauses now
-		//This will restart the game if the snake hits the wall
-		//Lets add the code for body collision
-		//Now if the head of the snake bumps into its body, the game will restart
-		if(nx == -1 || nx >= w/cw || ny == -1 || ny >= h/cw)  //==  || 
-		{
-		if(play) {init();return} else if(nx >= w/cw) nx=0; else if(ny >= h/cw) ny=0; else if(nx == -1) nx=Math.floor(w/cw); else if(ny == -1) ny=Math.floor(h/cw)
-		}
-		else if(check_collision(nx, ny, snake_array))
-		{
-			//restart game
-			init();
-			//Lets organize the code a bit now.
-			return;
-		}
-		
-		//Lets write the code to make the snake eat the food
-		//The logic is simple
-		//If the new head position matches with that of the food,
-		//Create a new head instead of moving the tail
-		if(nx == food.x && ny == food.y)
-		{
-			var tail = {x: nx, y: ny};
-			score+=10  //++;
-			audiop.play()
-			//Lets paint the score
-			disp.textContent=score  //
-			//Create new food
-			create_food();
-		}
-		else
-		{
-			ctx.clearRect(snake_array[snake_array.length-1].x*cw, snake_array[snake_array.length-1].y*cw, cw, cw)	 //		
-			var tail = snake_array.pop(); //pops out the last cell
-			tail.x = nx; tail.y = ny;
-		}
-		//The snake can now eat the food.
-		
-		snake_array.unshift(tail); //puts back the tail as the first cell
-		ctx.fillStyle = "yellow";  //		
-    paint_cell(tail.x, tail.y)
-	
-	}
 	
 	//Lets first create a generic function to paint cells
 	function paint_cell(x, y)
@@ -168,10 +153,15 @@ canvas {background:#479438}
 	window.onkeydown = function(e){
 		var key = e.which;
 		//We will add another clause to prevent reverse gear
-		if(key == "37" && d != "right") d = "left";
-		else if(key == "38" && d != "down") d = "up";
-		else if(key == "39" && d != "left") d = "right";
-		else if(key == "40" && d != "up") d = "down";
+		if(key == "37" && snake1.d != "right") snake1.d = "left";
+		else if(key == "38" && snake1.d != "down") snake1.d = "up";
+		else if(key == "39" && snake1.d != "left") snake1.d = "right";
+		else if(key == "40" && snake1.d != "up") snake1.d = "down";
+
+		else if(key == "65" && snake2.d != "right") snake2.d = "left";  //A
+		else if(key == "87" && snake2.d != "down") snake2.d = "up";  //W
+		else if(key == "68" && snake2.d != "left") {if(snake2.snake_array.length) snake2.d = "right"; else snake2.create_snake()}  //D
+		else if(key == "83" && snake2.d != "up") snake2.d = "down";  //S
 		//The snake is now keyboard controllable
 	}
 
@@ -187,11 +177,11 @@ window.addEventListener('touchmove', function (evt) {
     var yDiff = yDown - yUp;
 
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-        if ( xDiff > 0 ) { if(d!='right') d="left" } //left swipe
-         else { if(d!='left') d="right" } //right swipe
+        if ( xDiff > 0 ) { if(snake1.d!='right') snake1.d="left" } //left swipe
+         else { if(snake1.d!='left') snake1.d="right" } //right swipe
     } else {
-        if ( yDiff > 0 ) { if(d!='down') d="up" }  //up swipe
-         else { if(d!='up') d="down" } //down swipe
+        if ( yDiff > 0 ) { if(snake1.d!='down') snake1.d="up" }  //up swipe
+         else { if(snake1.d!='up') snake1.d="down" } //down swipe
     }
     xDown = null;  //reset values
     yDown = null;

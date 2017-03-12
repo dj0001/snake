@@ -187,6 +187,12 @@ window.addEventListener('touchmove', function (evt) {
     yDown = null;
 })
 
+if(top.location.search.slice(1)=="0")  // ?0
+window.addEventListener('deviceorientation', function (e) {var tiltValue=e.gamma, tiltValub=e.beta
+if(tiltValue>3 && snake1.d!='down') snake1.d="up"; else if(tiltValue<-3 && snake1.d!='up') snake1.d="down"
+if(tiltValub>3 && snake1.d!='left') snake1.d="right"; else if(tiltValub<-3 && snake1.d!='right') snake1.d="left"  //6
+}, false);
+	
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').then(function(registration) {
